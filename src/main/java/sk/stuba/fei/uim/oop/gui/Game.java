@@ -17,7 +17,7 @@ public class Game extends UniversalAdapter {
     public Game() {
         this.frame = new JFrame("Reversi");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setSize(720,720);
+        this.frame.setSize(720,752);
         this.frame.setResizable(false);
         this.frame.setFocusable(true);
 
@@ -49,7 +49,6 @@ public class Game extends UniversalAdapter {
         this.frame.add(panel, BorderLayout.PAGE_END);
 
         this.frame.setVisible(true);
-        this.frame.revalidate();
         this.frame.repaint();
     }
 

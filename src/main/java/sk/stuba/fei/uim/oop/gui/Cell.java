@@ -9,21 +9,21 @@ import static sk.stuba.fei.uim.oop.gui.Colors.TRANSPARENT;
 
 public class Cell extends JPanel {
     @Getter
-    private int rows, cols;
+    private int row, col;
     @Getter
     private Color backColor, chipColor;
 
-    public Cell(int rows, int cols, Color backColor) {
-        this.rows = rows;
-        this.cols = cols;
+    public Cell(int row, int col, Color backColor) {
+        this.row = row;
+        this.col = col;
         this.backColor = backColor;
         this.setBackground(this.backColor);
 
         this.chipColor = TRANSPARENT;
     }
 
-    public Cell(int rows, int cols, Color backColor, Color chipColor) {
-        this(rows, cols, backColor);
+    public Cell(int row, int col, Color backColor, Color chipColor) {
+        this(row, col, backColor);
 
         this.chipColor = chipColor;
     }

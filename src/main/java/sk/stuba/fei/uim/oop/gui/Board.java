@@ -1,6 +1,6 @@
 package sk.stuba.fei.uim.oop.gui;
 
-import sk.stuba.fei.uim.oop.controls.MyMouseAdapter;
+import sk.stuba.fei.uim.oop.controls.MouseAdapterInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 
 import static sk.stuba.fei.uim.oop.gui.Colors.*;
 
-public class Board extends JPanel implements MyMouseAdapter {
+public class Board extends JPanel implements MouseAdapterInterface {
     private int size, prevRow, prevCol;
     private Cell[][] board;
 
@@ -51,8 +51,8 @@ public class Board extends JPanel implements MyMouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         Cell comp = (Cell) this.getComponentAt(e.getPoint());
-        int rows = comp.getRows();
-        int cols = comp.getCols();
+        int rows = comp.getRow();
+        int cols = comp.getCol();
         String out = String.format("%s: %d %d", this.getClass().getSimpleName(), rows, cols);
         System.out.println(out);
 
@@ -63,17 +63,20 @@ public class Board extends JPanel implements MyMouseAdapter {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        Cell comp = (Cell) this.getComponentAt(e.getPoint());
-        int rows = comp.getRows();
-        int cols = comp.getCols();
+        Cell comp;
+        try {
+            comp = (Cell) this.getComponentAt(e.getPoint());
+        } catch (ClassCastException exc) {return;}
+        int rows = comp.getRow();
+        int cols = comp.getCol();
 
         if (this.board[rows][cols].getChipColor() == TRANSPARENT) {
-            this.board[rows][cols] = new Cell(rows, cols, comp.getBackColor(), Color.CYAN);
+            this.board[rows][cols] = new Cell(rows, cols, comp.getBackColor(), LIGHT_CYAN);
 
             if (rows != this.prevRow || cols != this.prevCol) {
                 Color prevBack = this.board[this.prevRow][this.prevCol].getBackColor();
                 Color prevChip = this.board[this.prevRow][this.prevCol].getChipColor();
-                if (prevChip == Color.CYAN) prevChip = TRANSPARENT;
+                if (prevChip == LIGHT_CYAN) prevChip = TRANSPARENT;
                 this.board[this.prevRow][this.prevCol] = new Cell(this.prevRow, this.prevCol, prevBack, prevChip);
                 this.prevRow = rows;
                 this.prevCol = cols;

@@ -12,7 +12,8 @@ public class Game extends UniversalAdapter {
     private final JFrame frame;
     private final JLabel playerLabel;
     private final JLabel boardSizeLabel;
-    public int boardSize;
+    private Board board;
+    private int boardSize;
 
     public Game() {
         this.frame = new JFrame("Reversi");
@@ -22,9 +23,9 @@ public class Game extends UniversalAdapter {
         this.frame.setFocusable(true);
 
         this.frame.setLayout(new BorderLayout());
-        this.frame.addKeyListener(this);
         this.boardSize = 6;
-        this.frame.add(new Board(this.boardSize));
+        restart(this.boardSize);
+        this.frame.addKeyListener(this);
 
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 32, 16));
@@ -34,6 +35,7 @@ public class Game extends UniversalAdapter {
 
         JButton button = new JButton("Restart");
         button.addActionListener(this);
+        button.setFocusable(false);
         panel.add(button);
 
         this.boardSizeLabel = new JLabel("6 x 6");
@@ -49,24 +51,38 @@ public class Game extends UniversalAdapter {
         this.frame.add(panel, BorderLayout.PAGE_END);
 
         this.frame.setVisible(true);
+    }
+
+    public void restart(int size) {
+        try {
+            this.frame.remove(this.board);
+        } catch (NullPointerException ignored) {}
+        this.board = new Board(size);
+        this.frame.add(this.board);
+        this.frame.revalidate();
         this.frame.repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
+        restart(this.boardSize);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE: this.frame.dispose(); break;
+            case KeyEvent.VK_R: restart(this.boardSize); break;
         }
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        this.boardSize = ((JSlider) e.getSource()).getValue();
-        this.boardSizeLabel.setText(this.boardSize + " x " + this.boardSize);
+        int size = ((JSlider) e.getSource()).getValue();
+        if (size != this.boardSize && size % 2 == 0) {
+            this.boardSize = size;
+            restart(this.boardSize);
+            this.boardSizeLabel.setText(this.boardSize + " x " + this.boardSize);
+        }
     }
 }

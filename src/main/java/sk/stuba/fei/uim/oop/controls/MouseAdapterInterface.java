@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public interface MyMouseAdapter extends MouseListener, MouseMotionListener {
+public interface MouseAdapterInterface extends MouseListener, MouseMotionListener {
     @Override
     default void mouseClicked(MouseEvent e) {
     }

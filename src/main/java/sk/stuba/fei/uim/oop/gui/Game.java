@@ -1,5 +1,8 @@
 package sk.stuba.fei.uim.oop.gui;
 
+import lombok.Getter;
+import sk.stuba.fei.uim.oop.players.Player;
+import sk.stuba.fei.uim.oop.players.PlayerList;
 import sk.stuba.fei.uim.oop.utility.UniversalAdapter;
 
 import javax.swing.*;
@@ -10,10 +13,11 @@ import java.awt.event.KeyEvent;
 
 public class Game extends UniversalAdapter {
     private final JFrame frame;
-    private final JLabel playerLabel;
-    private final JLabel boardSizeLabel;
+    @Getter
+    private final JLabel playerLabel, scoreLabel, boardSizeLabel;
     private Board board;
     private int boardSize;
+    private PlayerList players;
 
     public Game() {
         frame = new JFrame("Reversi");
@@ -22,16 +26,21 @@ public class Game extends UniversalAdapter {
         frame.setResizable(false);
         frame.setFocusable(true);
 
+        players = new PlayerList(new Player("Player 1", Color.BLACK), null);
+        players.addNode(new PlayerList(new Player("Player 2", Color.WHITE), this.players));
+
         frame.setLayout(new BorderLayout());
         boardSize = 6;
-        restart(boardSize);
+        this.restart(boardSize);
         frame.addKeyListener(this);
 
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 32, 16));
 
-        playerLabel = new JLabel("Player");
+        playerLabel = new JLabel(players.getNode().getName());
         panel.add(playerLabel);
+        scoreLabel = new JLabel("Score");
+        panel.add(scoreLabel);
 
         JButton button = new JButton("Restart");
         button.addActionListener(this);
@@ -58,7 +67,7 @@ public class Game extends UniversalAdapter {
         try {
             this.frame.remove(this.board);
         } catch (NullPointerException ignored) {}
-        this.board = new Board(size);
+        this.board = new Board(this, size, this.players);
         this.frame.add(this.board);
         this.frame.revalidate();
         this.frame.repaint();

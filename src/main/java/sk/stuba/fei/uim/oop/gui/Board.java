@@ -1,6 +1,8 @@
 package sk.stuba.fei.uim.oop.gui;
 
-import sk.stuba.fei.uim.oop.controls.MouseAdapterInterface;
+import sk.stuba.fei.uim.oop.players.Player;
+import sk.stuba.fei.uim.oop.players.PlayerList;
+import sk.stuba.fei.uim.oop.utility.MouseAdapterInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +13,13 @@ import static sk.stuba.fei.uim.oop.gui.Colors.*;
 public class Board extends JPanel implements MouseAdapterInterface {
     private int size, prevRow, prevCol;
     private Cell[][] board;
+    private PlayerList players;
 
     public Board(int size) {
         this.size = size;
         this.board = new Cell[this.size][this.size];
+        this.players = new PlayerList(new Player("Player 1", Color.BLACK), null);
+        this.players.addNode(new PlayerList(new Player("Player 2", Color.WHITE), this.players));
 
         this.setLayout(new GridLayout(this.size, this.size));
         this.addMouseListener(this);
@@ -53,10 +58,9 @@ public class Board extends JPanel implements MouseAdapterInterface {
         Cell comp = (Cell) this.getComponentAt(e.getPoint());
         int rows = comp.getRow();
         int cols = comp.getCol();
-        String out = String.format("%s: %d %d", this.getClass().getSimpleName(), rows, cols);
-        System.out.println(out);
 
-        this.board[rows][cols] = new Cell(rows, cols, comp.getBackColor(), Color.RED);
+        this.board[rows][cols] = new Cell(rows, cols, comp.getBackColor(), this.players.getNode().getColor());
+        this.players = this.players.getNext();
 
         this.repaint();
     }

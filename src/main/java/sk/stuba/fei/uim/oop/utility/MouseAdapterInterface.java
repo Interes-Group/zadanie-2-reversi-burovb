@@ -1,4 +1,4 @@
-package sk.stuba.fei.uim.oop.controls;
+package sk.stuba.fei.uim.oop.utility;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

@@ -18,6 +18,7 @@ public class Game extends UniversalAdapter {
     private Board board;
     private int boardSize;
     private PlayerList players;
+    private Player firstPlayer;
 
     public Game() {
         frame = new JFrame("Reversi");
@@ -28,6 +29,7 @@ public class Game extends UniversalAdapter {
 
         players = new PlayerList(new Player("Player 1", Color.BLACK), null);
         players.addNode(new PlayerList(new Player("Player 2", Color.WHITE), this.players));
+        firstPlayer = players.getNode();
 
         frame.setLayout(new BorderLayout());
         boardSize = 6;
@@ -69,6 +71,7 @@ public class Game extends UniversalAdapter {
         } catch (NullPointerException ignored) {}
         this.board = new Board(this, size, this.players);
         this.frame.add(this.board);
+        this.players.setNode(firstPlayer);
         this.frame.revalidate();
         this.frame.repaint();
     }
